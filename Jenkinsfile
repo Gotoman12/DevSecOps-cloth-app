@@ -40,5 +40,15 @@ pipeline{
                 }
             }
         }
+        stage("SonarQube-testing"){
+            steps{
+                sh '''
+                         mvn sonar:sonar \
+                        -Dsonar.projectKey=cloth-app \
+                        -Dsonar.host.url=http://44.204.70.230:9000 \
+                        -Dsonar.login=3e42eeddba9a67fc2bc8d70eda7ef722410e5297
+                '''
+            }
+        }
     }
 }
