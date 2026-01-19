@@ -109,7 +109,7 @@ pipeline{
     }
      stage("Docker Build"){
         steps{
-          sh 'docker build -t image:${IMAGE_NAME} .'
+          sh 'docker build -t {IMAGE_NAME} .'
          }
     }
   }
