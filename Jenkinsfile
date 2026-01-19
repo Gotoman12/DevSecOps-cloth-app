@@ -111,6 +111,6 @@ pipeline{
         steps{
           sh 'docker build -t ${IMAGE_NAME} .'
          }
+      }
     }
-  }
 }
