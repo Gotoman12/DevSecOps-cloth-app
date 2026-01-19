@@ -1,7 +1,9 @@
 FROM maven:3.8.3-eclipse-temurin-17 As builder
+RUN useradd -m -s /bin/bash appuser
 WORKDIR /app
 COPY . /app
-RUN mvn clean package -DskipTests
+RUN chown -R appuser:appuser /app
+USER appuser
 
 FROM eclipse-temurin:17-jre
 WORKDIR /app

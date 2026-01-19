@@ -99,6 +99,8 @@ pipeline{
     //         sh 'mvn org.owasp:dependency-check-maven:check -Dformat=ALL'
     //     }
     // }
+
+    // Scanning the the base image used in the docker file
     stage("Trivy Scan for Docker base image"){
         steps{
           sh '''
@@ -106,7 +108,12 @@ pipeline{
             bash trivy-docker-image-scan.sh
           '''
          }
-    }
+       }
+    stage('OPA confest'){
+                    steps{
+                      sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy dockerfile-security.rego Dockerfile'  
+                    }
+                }
      stage("Docker Build"){
         steps{
           sh 'docker build -t ${IMAGE_NAME} .'
