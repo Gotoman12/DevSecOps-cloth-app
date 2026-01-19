@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ClothingService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cloth-app</a> &gt; <a href="index.source.html" class="el_package">com.example.clothapp.service</a> &gt; <span class="el_source">ClothingService.java</span></div><h1>ClothingService.java</h1><pre class="source lang-java linenums">package com.example.clothapp.service;
+
+import com.example.clothapp.model.ClothingItem;
+import com.example.clothapp.repository.ClothingItemRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class ClothingService {
+
+    private final ClothingItemRepository repository;
+
+<span class="nc" id="L14">    public ClothingService(ClothingItemRepository repository) {</span>
+<span class="nc" id="L15">        this.repository = repository;</span>
+<span class="nc" id="L16">    }</span>
+
+    public List&lt;ClothingItem&gt; listAll(String query) {
+<span class="nc bnc" id="L19" title="All 4 branches missed.">        if (query == null || query.isBlank()) {</span>
+<span class="nc" id="L20">            return repository.findAll();</span>
+        }
+<span class="nc" id="L22">        return repository.searchByNameOrCategory(query.trim());</span>
+    }
+
+    public ClothingItem getById(Long id) {
+<span class="nc" id="L26">        return repository.findById(id)</span>
+<span class="nc" id="L27">                .orElseThrow(() -&gt; new IllegalArgumentException(&quot;Item not found: &quot; + id));</span>
+    }
+
+    public ClothingItem create(ClothingItem item) {
+<span class="nc" id="L31">        item.setId(null);</span>
+<span class="nc" id="L32">        return repository.save(item);</span>
+    }
+
+    public ClothingItem update(Long id, ClothingItem updated) {
+<span class="nc" id="L36">        ClothingItem existing = getById(id);</span>
+<span class="nc" id="L37">        existing.setName(updated.getName());</span>
+<span class="nc" id="L38">        existing.setSize(updated.getSize());</span>
+<span class="nc" id="L39">        existing.setColor(updated.getColor());</span>
+<span class="nc" id="L40">        existing.setPrice(updated.getPrice());</span>
+<span class="nc" id="L41">        existing.setStock(updated.getStock());</span>
+<span class="nc" id="L42">        existing.setCategory(updated.getCategory());</span>
+<span class="nc" id="L43">        return repository.save(existing);</span>
+    }
+
+    public void delete(Long id) {
+<span class="nc" id="L47">        repository.deleteById(id);</span>
+<span class="nc" id="L48">    }</span>
+
+    public void decreaseStock(Long itemId, int quantity) {
+<span class="nc" id="L51">        ClothingItem item = getById(itemId);</span>
+<span class="nc" id="L52">        int newStock = item.getStock() - quantity;</span>
+<span class="nc bnc" id="L53" title="All 2 branches missed.">        if (newStock &lt; 0) {</span>
+<span class="nc" id="L54">            throw new IllegalArgumentException(&quot;Insufficient stock for item &quot; + itemId);</span>
+        }
+<span class="nc" id="L56">        item.setStock(newStock);</span>
+<span class="nc" id="L57">        repository.save(item);</span>
+<span class="nc" id="L58">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
