@@ -29,16 +29,16 @@ pipeline{
             steps{
                 sh 'mvn jacoco:report'
             }
-            post {
-                always {
-                    jacoco(
-                        execPattern: '**/target/jacoco.exec',
-                        classPattern: '**/target/classes',
-                        sourcePattern: '**/src/main/java',
-                        inclusionPattern: '**/*.class'
-                    )
-                }
-            }
+            // post {
+            //     always {
+            //         jacoco(
+            //             execPattern: '**/target/jacoco.exec',
+            //             classPattern: '**/target/classes',
+            //             sourcePattern: '**/src/main/java',
+            //             inclusionPattern: '**/*.class'
+            //         )
+            //     }
+            // }
         }
     }
 }
