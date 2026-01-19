@@ -4,6 +4,10 @@ pipeline{
         jdk "java-17"
         maven "maven"
     }
+
+    environment{
+        IMAGE_NAME= "arjunckm/cloth-app:${BUILD_NUMBER}"
+    }
     stages{
         stage("Git-Checkout"){
             steps{
@@ -95,12 +99,17 @@ pipeline{
     //         sh 'mvn org.owasp:dependency-check-maven:check -Dformat=ALL'
     //     }
     // }
-    stage("Trivy Scan"){
+    stage("Trivy Scan for Docker base image"){
         steps{
           sh '''
             chmod +x trivy-docker-image-scan.sh
             bash trivy-docker-image-scan.sh
           '''
+         }
+    }
+     stage("Docker Build"){
+        steps{
+          sh 'docker build -t image:${BUILD_NUMBER} .'
          }
     }
   }
