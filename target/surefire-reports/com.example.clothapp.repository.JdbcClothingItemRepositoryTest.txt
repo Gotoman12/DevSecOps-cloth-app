@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.example.clothapp.repository.JdbcClothingItemRepositoryTest
+-------------------------------------------------------------------------------
+Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 29.84 s -- in com.example.clothapp.repository.JdbcClothingItemRepositoryTest

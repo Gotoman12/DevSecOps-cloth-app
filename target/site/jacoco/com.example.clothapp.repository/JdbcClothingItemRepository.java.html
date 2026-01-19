@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JdbcClothingItemRepository.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cloth-app</a> &gt; <a href="index.source.html" class="el_package">com.example.clothapp.repository</a> &gt; <span class="el_source">JdbcClothingItemRepository.java</span></div><h1>JdbcClothingItemRepository.java</h1><pre class="source lang-java linenums">package com.example.clothapp.repository;
+
+import com.example.clothapp.model.ClothingItem;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Repository;
+
+import java.math.BigDecimal;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+public class JdbcClothingItemRepository implements ClothingItemRepository {
+
+    private final JdbcTemplate jdbcTemplate;
+
+<span class="fc" id="L21">    private final RowMapper&lt;ClothingItem&gt; rowMapper = (rs, rowNum) -&gt; {</span>
+<span class="fc" id="L22">        ClothingItem item = new ClothingItem();</span>
+<span class="fc" id="L23">        item.setId(rs.getLong(&quot;id&quot;));</span>
+<span class="fc" id="L24">        item.setName(rs.getString(&quot;name&quot;));</span>
+<span class="fc" id="L25">        item.setSize(rs.getString(&quot;size&quot;));</span>
+<span class="fc" id="L26">        item.setColor(rs.getString(&quot;color&quot;));</span>
+<span class="fc" id="L27">        item.setPrice(BigDecimal.valueOf(rs.getDouble(&quot;price&quot;)));</span>
+<span class="fc" id="L28">        item.setStock(rs.getInt(&quot;stock&quot;));</span>
+<span class="fc" id="L29">        item.setCategory(rs.getString(&quot;category&quot;));</span>
+<span class="fc" id="L30">        return item;</span>
+    };
+
+<span class="fc" id="L33">    public JdbcClothingItemRepository(JdbcTemplate jdbcTemplate) {</span>
+<span class="fc" id="L34">        this.jdbcTemplate = jdbcTemplate;</span>
+<span class="fc" id="L35">    }</span>
+
+    @Override
+    public List&lt;ClothingItem&gt; findAll() {
+<span class="fc" id="L39">        String sql = &quot;SELECT * FROM clothing_item ORDER BY name&quot;;</span>
+<span class="fc" id="L40">        return jdbcTemplate.query(sql, rowMapper);</span>
+    }
+
+    @Override
+    public Optional&lt;ClothingItem&gt; findById(Long id) {
+<span class="fc" id="L45">        String sql = &quot;SELECT * FROM clothing_item WHERE id = ?&quot;;</span>
+<span class="fc" id="L46">        List&lt;ClothingItem&gt; result = jdbcTemplate.query(sql, rowMapper, id);</span>
+<span class="fc" id="L47">        return result.stream().findFirst();</span>
+    }
+
+    @Override
+    public List&lt;ClothingItem&gt; searchByNameOrCategory(String query) {
+<span class="fc" id="L52">        String like = &quot;%&quot; + query.toLowerCase() + &quot;%&quot;;</span>
+<span class="fc" id="L53">        String sql = &quot;SELECT * FROM clothing_item WHERE lower(name) LIKE ? OR lower(category) LIKE ? ORDER BY name&quot;;</span>
+<span class="fc" id="L54">        return jdbcTemplate.query(sql, rowMapper, like, like);</span>
+    }
+
+    @Override
+    public ClothingItem save(ClothingItem item) {
+<span class="fc bfc" id="L59" title="All 2 branches covered.">        if (item.getId() == null) {</span>
+<span class="fc" id="L60">            String sql = &quot;INSERT INTO clothing_item (name, size, color, price, stock, category) VALUES (?, ?, ?, ?, ?, ?)&quot;;</span>
+<span class="fc" id="L61">            KeyHolder keyHolder = new GeneratedKeyHolder();</span>
+<span class="fc" id="L62">            jdbcTemplate.update(con -&gt; {</span>
+<span class="fc" id="L63">                PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);</span>
+<span class="fc" id="L64">                ps.setString(1, item.getName());</span>
+<span class="fc" id="L65">                ps.setString(2, item.getSize());</span>
+<span class="fc" id="L66">                ps.setString(3, item.getColor());</span>
+<span class="fc" id="L67">                ps.setDouble(4, item.getPrice().doubleValue());</span>
+<span class="fc" id="L68">                ps.setInt(5, item.getStock());</span>
+<span class="fc" id="L69">                ps.setString(6, item.getCategory());</span>
+<span class="fc" id="L70">                return ps;</span>
+            }, keyHolder);
+<span class="fc" id="L72">            Number key = keyHolder.getKey();</span>
+<span class="pc bpc" id="L73" title="1 of 2 branches missed.">            if (key != null) {</span>
+<span class="fc" id="L74">                item.setId(key.longValue());</span>
+            }
+<span class="fc" id="L76">        } else {</span>
+<span class="fc" id="L77">            String sql = &quot;UPDATE clothing_item SET name = ?, size = ?, color = ?, price = ?, stock = ?, category = ? WHERE id = ?&quot;;</span>
+<span class="fc" id="L78">            jdbcTemplate.update(sql,</span>
+<span class="fc" id="L79">                    item.getName(),</span>
+<span class="fc" id="L80">                    item.getSize(),</span>
+<span class="fc" id="L81">                    item.getColor(),</span>
+<span class="fc" id="L82">                    item.getPrice().doubleValue(),</span>
+<span class="fc" id="L83">                    item.getStock(),</span>
+<span class="fc" id="L84">                    item.getCategory(),</span>
+<span class="fc" id="L85">                    item.getId());</span>
+        }
+<span class="fc" id="L87">        return item;</span>
+    }
+
+    @Override
+    public void deleteById(Long id) {
+<span class="fc" id="L92">        String sql = &quot;DELETE FROM clothing_item WHERE id = ?&quot;;</span>
+<span class="fc" id="L93">        jdbcTemplate.update(sql, id);</span>
+<span class="fc" id="L94">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
