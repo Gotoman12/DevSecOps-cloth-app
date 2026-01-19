@@ -1,7 +1,7 @@
-C:\Users\admin\cloth-app\src\main\java\com\example\clothapp\ClothAppApplication.java
-C:\Users\admin\cloth-app\src\main\java\com\example\clothapp\model\ClothingItem.java
-C:\Users\admin\cloth-app\src\main\java\com\example\clothapp\service\CartService.java
-C:\Users\admin\cloth-app\src\main\java\com\example\clothapp\repository\ClothingItemRepository.java
-C:\Users\admin\cloth-app\src\main\java\com\example\clothapp\model\CartItem.java
-C:\Users\admin\cloth-app\src\main\java\com\example\clothapp\service\ClothingService.java
-C:\Users\admin\cloth-app\src\main\java\com\example\clothapp\repository\JdbcClothingItemRepository.java
+G:\DevSecOps-cloth-app\src\main\java\com\example\clothapp\repository\ClothingItemRepository.java
+G:\DevSecOps-cloth-app\src\main\java\com\example\clothapp\service\ClothingService.java
+G:\DevSecOps-cloth-app\src\main\java\com\example\clothapp\repository\JdbcClothingItemRepository.java
+G:\DevSecOps-cloth-app\src\main\java\com\example\clothapp\service\CartService.java
+G:\DevSecOps-cloth-app\src\main\java\com\example\clothapp\model\CartItem.java
+G:\DevSecOps-cloth-app\src\main\java\com\example\clothapp\ClothAppApplication.java
+G:\DevSecOps-cloth-app\src\main\java\com\example\clothapp\model\ClothingItem.java
