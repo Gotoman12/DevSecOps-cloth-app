@@ -1,7 +1,0 @@
-GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-cloth-app,com.example.clothapp,ClothAppApplication,8,0,0,0,3,0,2,0,2,0
-cloth-app,com.example.clothapp.model,CartItem,32,0,0,0,11,0,6,0,6,0
-cloth-app,com.example.clothapp.model,ClothingItem,76,0,0,0,32,0,16,0,16,0
-cloth-app,com.example.clothapp.service,CartService,83,0,2,0,20,0,8,0,7,0
-cloth-app,com.example.clothapp.service,ClothingService,108,0,6,0,27,0,11,0,8,0
-cloth-app,com.example.clothapp.repository,JdbcClothingItemRepository,232,0,4,0,50,0,10,0,8,0

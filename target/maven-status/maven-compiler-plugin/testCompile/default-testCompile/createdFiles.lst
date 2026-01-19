@@ -1,0 +1,4 @@
+com\example\clothapp\service\CartServiceTest.class
+com\example\clothapp\service\ClothingServiceTest.class
+com\example\clothapp\repository\JdbcClothingItemRepositoryTest.class
+com\example\clothapp\SanityTest.class
