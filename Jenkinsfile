@@ -40,15 +40,25 @@ pipeline{
                 }
             }
         }
-        stage("SonarQube-testing"){
+        // stage("SonarQube-testing"){
+        //     steps{
+        //         sh '''
+        //                  mvn sonar:sonar \
+        //                 -Dsonar.projectKey=cloth-app \
+        //                 -Dsonar.host.url=http://44.204.70.230:9000 \
+        //                 -Dsonar.login=3e42eeddba9a67fc2bc8d70eda7ef722410e5297
+        //         '''
+        //     }
+        // }
+        stage("SonarQube-Analysis"){
             steps{
-                sh '''
-                         mvn sonar:sonar \
-                        -Dsonar.projectKey=cloth-app \
-                        -Dsonar.host.url=http://44.204.70.230:9000 \
-                        -Dsonar.login=3e42eeddba9a67fc2bc8d70eda7ef722410e5297
-                '''
+                script{
+                    withSonarQubeEnv(credentialsId: 'sonarqube'){
+                        sh 'mvn clean package org.sonarsource.scanner.maven:sonar-maven-plugin:sonar'
+                    }
+                }
             }
+
         }
     }
 }
