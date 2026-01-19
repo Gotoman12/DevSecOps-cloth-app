@@ -50,23 +50,45 @@ pipeline{
         //         '''
         //     }
         // }
-        stage("SonarQube-Analysis"){
-            steps{
-                script{
-                    withSonarQubeEnv(credentialsId: 'sonarqube'){
-                        sh 'mvn clean package org.sonarsource.scanner.maven:sonar-maven-plugin:sonar'
+        stage("Sonar-Qube"){
+                    parallel{
+                        stage("SonarQube-Analysis"){
+                        steps{
+                            script{
+                            withSonarQubeEnv(credentialsId: 'sonarqube'){
+                                sh 'mvn clean package org.sonarsource.scanner.maven:sonar-maven-plugin:sonar'
+                            }
+                        }
                     }
                 }
+               stage("Quality Gate"){
+                    steps{
+                        timeout(time: 1, unit: 'HOURS') {
+                            // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
+                            // true = set pipeline to UNSTABLE, false = don't
+                            waitForQualityGate abortPipeline: true
+                        }
+                    }
+                } 
             }
         }
-        stage("Quality Gate"){
-            steps{
-                timeout(time: 1, unit: 'HOURS') {
-                    // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
-                    // true = set pipeline to UNSTABLE, false = don't
-                    waitForQualityGate abortPipeline: true
-            }
-        }
-    }
+    //     stage("SonarQube-Analysis"){
+    //         steps{
+    //             script{
+    //                 withSonarQubeEnv(credentialsId: 'sonarqube'){
+    //                     sh 'mvn clean package org.sonarsource.scanner.maven:sonar-maven-plugin:sonar'
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     stage("Quality Gate"){
+    //         steps{
+    //             timeout(time: 1, unit: 'HOURS') {
+    //                 // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
+    //                 // true = set pipeline to UNSTABLE, false = don't
+    //                 waitForQualityGate abortPipeline: true
+    //         }
+    //     }
+    // }
   }
 }
