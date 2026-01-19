@@ -19,7 +19,7 @@ public class JdbcClothingItemRepository implements ClothingItemRepository {
     private final JdbcTemplate jdbcTemplate;
 
     private final RowMapper<ClothingItem> rowMapper = (rs, rowNum) -> {
-        ClothingItem item = new ClothingItem();
+        var item = new ClothingItem();
         item.setId(rs.getLong("id"));
         item.setName(rs.getString("name"));
         item.setSize(rs.getString("size"));
@@ -36,13 +36,13 @@ public class JdbcClothingItemRepository implements ClothingItemRepository {
 
     @Override
     public List<ClothingItem> findAll() {
-        String sql = "SELECT * FROM clothing_item ORDER BY name";
+        var sql = "SELECT * FROM clothing_item ORDER BY name";
         return jdbcTemplate.query(sql, rowMapper);
     }
 
     @Override
     public Optional<ClothingItem> findById(Long id) {
-        String sql = "SELECT * FROM clothing_item WHERE id = ?";
+        var sql = "SELECT * FROM clothing_item WHERE id = ?";
         List<ClothingItem> result = jdbcTemplate.query(sql, rowMapper, id);
         return result.stream().findFirst();
     }
@@ -50,14 +50,14 @@ public class JdbcClothingItemRepository implements ClothingItemRepository {
     @Override
     public List<ClothingItem> searchByNameOrCategory(String query) {
         String like = "%" + query.toLowerCase() + "%";
-        String sql = "SELECT * FROM clothing_item WHERE lower(name) LIKE ? OR lower(category) LIKE ? ORDER BY name";
+        var sql = "SELECT * FROM clothing_item WHERE lower(name) LIKE ? OR lower(category) LIKE ? ORDER BY name";
         return jdbcTemplate.query(sql, rowMapper, like, like);
     }
 
     @Override
     public ClothingItem save(ClothingItem item) {
         if (item.getId() == null) {
-            String sql = "INSERT INTO clothing_item (name, size, color, price, stock, category) VALUES (?, ?, ?, ?, ?, ?)";
+            var sql = "INSERT INTO clothing_item (name, size, color, price, stock, category) VALUES (?, ?, ?, ?, ?, ?)";
             KeyHolder keyHolder = new GeneratedKeyHolder();
             jdbcTemplate.update(con -> {
                 PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -74,7 +74,7 @@ public class JdbcClothingItemRepository implements ClothingItemRepository {
                 item.setId(key.longValue());
             }
         } else {
-            String sql = "UPDATE clothing_item SET name = ?, size = ?, color = ?, price = ?, stock = ?, category = ? WHERE id = ?";
+            var sql = "UPDATE clothing_item SET name = ?, size = ?, color = ?, price = ?, stock = ?, category = ? WHERE id = ?";
             jdbcTemplate.update(sql,
                     item.getName(),
                     item.getSize(),
@@ -89,7 +89,7 @@ public class JdbcClothingItemRepository implements ClothingItemRepository {
 
     @Override
     public void deleteById(Long id) {
-        String sql = "DELETE FROM clothing_item WHERE id = ?";
+        var sql = "DELETE FROM clothing_item WHERE id = ?";
         jdbcTemplate.update(sql, id);
     }
 }
