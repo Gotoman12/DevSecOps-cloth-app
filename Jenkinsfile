@@ -25,7 +25,7 @@ pipeline{
                 sh 'mvn clean package'
             }
         }
-        stage("Package"){
+        stage("Unit Testing"){
             steps{
                 sh 'mvn jacoco:report'
             }
